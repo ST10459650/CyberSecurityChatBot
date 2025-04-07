@@ -1,0 +1,31 @@
+name: .NET Build & Test
+
+# Run on pushes and PRs to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    # a Linux runner with .NET SDK (installed)
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checks code
+      - uses: actions/checkout@v3
+
+      # 2. Install the .NET SDK
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'   
+
+      # 3. Restore NuGet packages
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 4. Build your solution
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
